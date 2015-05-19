@@ -1,0 +1,9 @@
+<body>
+  Hello from the layout
+  <% if current_user %>
+    Welcome, <%= current_user.email %>
+  <% else %>
+    No user
+  <% end %>
+  <%= yield %>
+</body>

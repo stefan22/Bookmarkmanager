@@ -1,4 +1,10 @@
+
+require 'sinatra'
 require 'data_mapper'
+
+
+
+set :views, Proc.new { File.join(root, ".",  "views")}
 
 env = ENV['RACK_ENV'] || 'development'
 
@@ -6,6 +12,9 @@ env = ENV['RACK_ENV'] || 'development'
 DataMapper.setup(:default, "postgres://localhost/bookmark_manager_#{env}")
 
 require './lib/link' # this needs to be done after datamapper is initialised
+require './lib/tag'
+require './lib/user'
+
 
 # After declaring your models, you should finalise them
 DataMapper.finalize
@@ -14,22 +23,65 @@ DataMapper.finalize
 DataMapper.auto_upgrade!
 
 
-require 'sinatra/base'
-
 class Bookmarkmanager < Sinatra::Base
 
-  get '/' do
+  enable :sessions
+  set :session_secret, 'super secret'
 
+
+  get '/' do
     @links = Link.all
-    erb :index
+    erb :index#, layout: :layout
   end
 
   post '/links' do
     url = params['url']
     title = params['title']
-    Link.create(url: url, title: title)
+
+    tags = params['tags'].split(' ').map do |tag|
+      # this will either find this tag or create
+      # it if it doesn't exist already
+      Tag.first_or_create(text: tag)
+    end
+    Link.create(url: url, title: title, tags: tags)
     redirect to('/')
   end
+
+
+  get '/tags/:text' do
+    tag = Tag.first(text: params[:text])
+    @links = tag ? tag.links : []
+    erb :index
+  end
+
+
+  get '/users/new' do
+    # note the view is in views/users/new.erb
+    # we need the quotes because otherwise
+    # ruby would divide the symbol :users by the
+    # variable new (which makes no sense)
+    erb :'users/new'
+  end
+
+
+  post '/users' do
+    user = User.create(email: params[:email],
+              password: params[:password])
+    session[:user_id] = user.id
+    redirect to('/')
+  end
+
+
+
+  helpers do
+
+    def current_user
+      @current_user ||= User.get(session[:user_id]) if session[:user_id]
+    end
+
+  end
+
+
 
 
 
