@@ -37,7 +37,7 @@ class User
   # will check if a record with this email exists before trying to create a new one
   # validates_uniqueness_of :email
 
-  property :email, String, unique: true
+  property :email, String, unique: true, message: 'This email is already taken'
 
 
   def password=(password)

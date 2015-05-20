@@ -19,20 +19,21 @@ feature 'User signs up' do
     expect(User.first.email).to eq('alice@example.com')
   end
 
-  def sign_up(email = 'alice@example.com',
-              password = 'oranges!')
-    visit '/users/new'
-    expect(page.status_code).to eq(200)
-    fill_in :email, with: email
-    fill_in :password, with: password
-    click_button 'Sign up'
-  end
+
 
   scenario 'with a password that does not match' do
     expect { sign_up('a@a.com', 'pass', 'wrong') }.to change(User, :count).by(0)
     expect(current_path).to eq('/users')
-    expect(page).to have_content('Sorry, your passwords do not match')
+    expect(page).to have_content('Sorry, there were the following problems with the form.')
   end
+
+
+  scenario 'with an email that is already registered' do
+    expect { sign_up }.to change(User, :count).by(1)
+    expect { sign_up }.to change(User, :count).by(0)
+    expect(page).to have_content('This email is already taken')
+  end
+
 
   def sign_up(email = 'alice@example.com',
               password = 'oranges!',
@@ -43,9 +44,6 @@ feature 'User signs up' do
     fill_in :password_confirmation, with: password_confirmation
     click_button 'Sign up'
   end
-
-
-
 
 
 

@@ -1,14 +1,21 @@
 <body>
 
-  <% if flash[:notice] %>
-    <div id='notice'><%= flash[:notice] %></div>
-  <% end %>
-
-
   <% if current_user %>
-    Welcome, <%= current_user.email %> passwords match!
-  <% else %>
-    No user
+    Welcome, <%= current_user.email %> 
   <% end %>
-  <%= yield %>
+
+
+
+  <% if flash[:errors] && !flash[:errors].empty? %>
+    Sorry, there were the following problems with the form.
+    <ul id='errors'>
+      <% flash[:errors].each do |error| %>
+        <li><%= error %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+<%= yield %>
+
+
 </body>
