@@ -1,7 +1,12 @@
 <body>
-  Hello from the layout
+
+  <% if flash[:notice] %>
+    <div id='notice'><%= flash[:notice] %></div>
+  <% end %>
+
+
   <% if current_user %>
-    Welcome, <%= current_user.email %>
+    Welcome, <%= current_user.email %> passwords match!
   <% else %>
     No user
   <% end %>
