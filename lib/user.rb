@@ -11,7 +11,9 @@ class User
   # It's Text and not String because String holds
   # 50 characters by default
   # and it's not enough for the hash and salt
+
   property :password_digest, Text
+
 
   # when assigned the password, we don't store it directly
   # instead, we generate a password digest, that looks like this:
@@ -19,16 +21,23 @@ class User
   # and save it in the database. This digest, provided by bcrypt,
   # has both the password hash and the salt. We save it to the
   # database instead of the plain password for security reasons.
+
   attr_reader :password
   attr_accessor :password_confirmation
+
 
   # this is datamapper's method of validating the model.
   # The model will not be saved unless both password
   # and password_confirmation are the same
   # read more about it in the documentation
   # http://datamapper.org/docs/validations.html
+
   validates_confirmation_of :password
 
+  # will check if a record with this email exists before trying to create a new one
+  # validates_uniqueness_of :email
+
+  property :email, String, unique: true
 
 
   def password=(password)
