@@ -28,6 +28,7 @@ class Bookmarkmanager < Sinatra::Base
 
   enable :sessions
   use Rack::Flash
+  use Rack::MethodOverride
   set :session_secret, 'super secret'
 
   post '/set-flash' do
@@ -104,7 +105,11 @@ class Bookmarkmanager < Sinatra::Base
     end
   end
 
-
+  delete '/sessions' do
+    flash[:notice] = 'Good bye!'
+    session['user_id'] = nil
+    redirect to ('/')
+  end
 
 
   helpers do
