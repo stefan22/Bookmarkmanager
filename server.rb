@@ -1,15 +1,13 @@
 
 require 'sinatra'
+require 'sinatra/partial'
 require 'data_mapper'
 require 'rack-flash'
 
-
-
-set :views, Proc.new { File.join(root, ".",  "views")}
-
 env = ENV['RACK_ENV'] || 'development'
 
-# we're telling datamapper to use a postgres database on localhost. The name will be "bookmark_manager_test" or "bookmark_manager_development" depending on the environment
+
+
 DataMapper.setup(:default, "postgres://localhost/bookmark_manager_#{env}")
 
 require './lib/link' # this needs to be done after datamapper is initialised
@@ -25,22 +23,17 @@ DataMapper.auto_upgrade!
 
 
 class Bookmarkmanager < Sinatra::Base
-
+  register Sinatra::Partial
+  set :views, Proc.new { File.join(root, ".",  "views")}
   enable :sessions
-  use Rack::Flash
-  use Rack::MethodOverride
   set :session_secret, 'super secret'
 
-  post '/set-flash' do
-    # Set a flash entry
-    flash[:notice] = "Thanks for signing up!"
+  set :partial_template_engine, :erb
 
-    # Get a flash entry
-    flash[:notice] # => "Thanks for signing up!"
+  use Rack::Flash
+  use Rack::MethodOverride
 
-    # Set a flash entry for only the current request
-    flash.now[:notice] = "Thanks for signing up!"
-  end
+
 
 
   get '/' do
@@ -89,6 +82,16 @@ class Bookmarkmanager < Sinatra::Base
 
   end
 
+  post '/user/password_recovery' do
+    user = User.first(email: params[:email])
+    # avoid having to memorise ascii codes
+    user.password_token = (1..64).map{('A'..'Z').to_a.sample}.join
+    user.password_token_timestamp = Time.now
+    user.save
+    # send password recovery email to use with with token.
+    user.send_recovery_email
+  end
+
   get '/sessions/new' do
     erb :'sessions/new'
   end
@@ -110,6 +113,18 @@ class Bookmarkmanager < Sinatra::Base
     session['user_id'] = nil
     redirect to ('/')
   end
+
+  post '/set-flash' do
+    # Set a flash entry
+    flash[:notice] = "Thanks for signing up!"
+
+    # Get a flash entry
+    flash[:notice] # => "Thanks for signing up!"
+
+    # Set a flash entry for only the current request
+    flash.now[:notice] = "Thanks for signing up!"
+  end
+
 
 
   helpers do

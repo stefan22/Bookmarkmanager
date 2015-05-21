@@ -1,7 +1,19 @@
-Please sign in.
+<section id="signin">
+  <h2>Please sign in</h2>
 
-<form method='post' action='/sessions'>
-  Email: <input type='text' name='email'>
-  Password: <input type='password' name='password'>
-  <input type='submit' value='Sign in'>
-</form>
+  <form method='post' action='/sessions'>
+    Email: <input type='text' name='email'><br/>
+    Password: <input type='password' name='password'><br/><br/>
+    <input type='submit' value='Sign in'>
+  </form>
+</section>
+
+<section id='forgot'>
+  <h4>Forgot ur password?</h4>
+
+  <form method="post" action="/user/password_recovery">
+    Email: <input type='email' name='email'><br/><br/>
+    <input type="submit" value="New password">
+  </form>
+
+</section>

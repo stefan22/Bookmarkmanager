@@ -1,18 +1,19 @@
+<section>
+  <h1>Bookmarkmanager</h1>
+  <ul>
+    <% @links.each do |link| %>
+      <li><a href='<%= link.url %>'><%= link.title %></a></li>
+
+    <% end %>
+  </ul>
 
 
-<ul>
-  <% @links.each do |link| %>
-    <li><a href='<%= link.url %>'><%= link.title %></a></li>
-
-  <% end %>
-</ul>
-
-
-<div id='new-link'>
-  <form action='/links' method='post'>
-    Url: <input type='text' name='url'>
-    Title: <input type='text' name='title'>
-    Tags: <input type="text" name="tags">
-    <input type='submit' value='Add link'>
-  </form>
-</div>
+  <div id='new-link'>
+    <form action='/links' method='post'>
+      Url: <input type='text' name='url'><br/>
+      Title: <input type='text' name='title'><br/>
+      Tags: <input type="text" name="tags"><br><br/>
+      <input type='submit' value='Add link'>
+    </form>
+  </div>
+</section>

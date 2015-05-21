@@ -19,4 +19,5 @@ group :development, :test do
  gem 'rspec'
  gem 'database_cleaner'
  gem 'bcrypt-ruby'
+ gem 'sinatra-partial'
 end
