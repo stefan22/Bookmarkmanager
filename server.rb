@@ -1,4 +1,4 @@
-
+require 'byebug'
 require 'sinatra'
 require 'data_mapper'
 require 'rack-flash'
@@ -86,6 +86,14 @@ class Bookmarkmanager < Sinatra::Base
       flash.now[:errors] = @user.errors.full_messages
       erb :'users/new'
     end
+
+  end
+
+  post '/users/password_reset' do
+    user = User.first(email: params[:email])
+    user.password_token = (1..49).map{('A'..'Z').to_a.sample}.join
+    user.password_token_timestamp = Time.now
+    user.save
 
   end
 
