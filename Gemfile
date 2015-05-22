@@ -20,5 +20,9 @@ group :development, :test do
  gem 'rspec'
  gem 'database_cleaner'
  gem 'bcrypt-ruby'
+<<<<<<< HEAD
  gem 'rubocop'
+=======
+ gem 'sinatra-partial'
+>>>>>>> 15b3a0e8ee794a3e05316a626c06d062982e2800
 end

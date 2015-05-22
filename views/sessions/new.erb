@@ -1,17 +1,35 @@
-Please sign in.
+<section id="signin">
+  <h2>Please sign in</h2>
 
+<<<<<<< HEAD
 <section id="sign-in">
   <form method='post' action='/sessions'>
     Email: <input type='text' name='email'>
     Password: <input type='password' name='password'>
+=======
+  <form method='post' action='/sessions'>
+    Email: <input type='text' name='email'><br/>
+    Password: <input type='password' name='password'><br/><br/>
+>>>>>>> 15b3a0e8ee794a3e05316a626c06d062982e2800
     <input type='submit' value='Sign in'>
   </form>
 </section>
 
+<<<<<<< HEAD
 
 <section id="password-recovery">
   <form method="post" action="/users/password_reset">
     Email: <input type="email" name="email">
     <input type="submit" value="Recover password">
   </form>
+=======
+<section id='forgot'>
+  <h4>Forgot ur password?</h4>
+
+  <form method="post" action="/user/password_recovery">
+    Email: <input type='email' name='email'><br/><br/>
+    <input type="submit" value="New password">
+  </form>
+
+>>>>>>> 15b3a0e8ee794a3e05316a626c06d062982e2800
 </section>

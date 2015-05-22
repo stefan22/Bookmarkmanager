@@ -1,7 +1,6 @@
-# bcrypt will generate the password hash
 require 'bcrypt'
-class User
 
+<<<<<<< HEAD
   include DataMapper::Resource
 
 
@@ -26,15 +25,21 @@ class User
   # has both the password hash and the salt. We save it to the
   # database instead of the plain password for security reasons.
 
+=======
+class User
+
+  include DataMapper::Resource
+
+>>>>>>> 15b3a0e8ee794a3e05316a626c06d062982e2800
   attr_reader :password
   attr_accessor :password_confirmation
 
+  property :id, Serial
+  property :email, String
+  property :password_digest, Text
+  property :password_token, String
+  property :password_token_timestamp, Time
 
-  # this is datamapper's method of validating the model.
-  # The model will not be saved unless both password
-  # and password_confirmation are the same
-  # read more about it in the documentation
-  # http://datamapper.org/docs/validations.html
 
   validates_confirmation_of :password
 
@@ -51,35 +56,17 @@ class User
 
 
   def self.authenticate(email, password)
-    # that's the user who is trying to sign in
     user = first(email: email)
-    # if this user exists and the password provided matches
-    # the one we have password_digest for, everything's fine
-    #
-    # The Password.new returns an object that overrides the ==
-    # method. Instead of comparing two passwords directly
-    # (which is impossible because we only have a one-way hash)
-    # the == method calculates the candidate password_digest from
-    # the password given and compares it to the password_digest
-    # it was initialised with.
-    # So, to recap: THIS IS NOT A STRING COMPARISON
     if user && BCrypt::Password.new(user.password_digest) == password
       # return this user
       user
     else
       nil
     end
-end
+  end
 
+  def send_recovery_email
+    # send email via mailgun
 
-
-
-
-
-
-
-
-
-
-
+  end
 end
